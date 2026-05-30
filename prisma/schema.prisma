@@ -1,0 +1,386 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Users ───────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  phone         String?
+  avatarUrl     String?
+  isVerified    Boolean   @default(false)
+  memberSince   DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  listings      Listing[]
+  professionals Professional[]
+  offers        Offer[]
+  favorites     Favorite[]
+  reviewsGiven  Review[]  @relation("ReviewAuthor")
+  reviewsReceived Review[] @relation("ReviewTarget")
+  sentMessages  Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageReceiver")
+  adultListings AdultListing[]
+  adultMessagesSent     AdultMessage[] @relation("AdultMsgSender")
+  adultMessagesReceived AdultMessage[] @relation("AdultMsgReceiver")
+
+  @@map("users")
+}
+
+// ─── Categories ──────────────────────────────────────────
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  icon        String?
+  parentId    String?
+  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryTree")
+  order       Int        @default(0)
+  createdAt   DateTime   @default(now())
+
+  listings      Listing[]
+  professionals Professional[]
+
+  @@map("categories")
+}
+
+// ─── Listings (Anuncios) ─────────────────────────────────
+
+model Listing {
+  id            String        @id @default(cuid())
+  code          String        @unique
+  title         String
+  slug          String        @unique
+  description   String
+  price         Decimal       @db.Decimal(12, 2)
+  originalPrice Decimal?      @db.Decimal(12, 2)
+  currency      String        @default("CUP")
+  condition     ItemCondition @default(USED)
+  status        ListingStatus @default(ACTIVE)
+  isFeatured    Boolean       @default(false)
+  viewCount     Int           @default(0)
+  location      String
+  latitude      Float?
+  longitude     Float?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId    String
+  category      Category      @relation(fields: [categoryId], references: [id])
+
+  images        ListingImage[]
+  favorites     Favorite[]
+  messages      Message[]
+  promotions    Promotion[]
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([status, isFeatured, createdAt(sort: Desc)])
+  @@index([location])
+  @@map("listings")
+}
+
+model ListingImage {
+  id        String   @id @default(cuid())
+  url       String
+  order     Int      @default(0)
+  isPrimary Boolean  @default(false)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@map("listing_images")
+}
+
+enum ItemCondition {
+  NEW
+  LIKE_NEW
+  USED
+  FOR_PARTS
+}
+
+enum ListingStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  SOLD
+  EXPIRED
+  REMOVED
+}
+
+// ─── Professionals ───────────────────────────────────────
+
+model Professional {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  description     String
+  yearsExperience Int      @default(0)
+  location        String
+  region          String?
+  comuna          String?
+  phone           String?
+  whatsapp        String?
+  isVerified      Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  viewCount       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id])
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([isActive, createdAt(sort: Desc)])
+  @@index([location])
+  @@index([region, comuna])
+  @@map("professionals")
+}
+
+// ─── Favorites ───────────────────────────────────────────
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+  @@map("favorites")
+}
+
+// ─── Reviews ─────────────────────────────────────────────
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  authorId  String
+  author    User     @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  targetId  String
+  target    User     @relation("ReviewTarget", fields: [targetId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([authorId, targetId])
+  @@map("reviews")
+}
+
+// ─── Messages ────────────────────────────────────────────
+
+model Message {
+  id         String   @id @default(cuid())
+  content    String
+  isRead     Boolean  @default(false)
+  senderId   String
+  sender     User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  listingId  String?
+  listing    Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([listingId])
+  @@map("messages")
+}
+
+// ─── Offers (Ofertas de Comercios) ──────────────────────
+
+model Offer {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  slug          String   @unique
+  title         String
+  businessName  String
+  description   String
+  address       String
+  region        String
+  comuna        String
+  phone         String
+  whatsapp      String?
+  imageUrl      String?
+  isFeatured    Boolean  @default(false)
+  viewCount     Int      @default(0)
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  promotions    OfferPromotion[]
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([region, comuna])
+  @@index([isFeatured, createdAt(sort: Desc)])
+  @@map("offers")
+}
+
+// ─── Offer Promotions (Ofertas Destacadas) ──────────────
+
+model OfferPromotion {
+  id         String   @id @default(cuid())
+  offerId    String
+  offer      Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  startDate  DateTime @default(now())
+  endDate    DateTime
+  amount     Decimal  @db.Decimal(10, 0)
+  note       String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@index([offerId])
+  @@index([endDate])
+  @@index([isActive])
+  @@map("offer_promotions")
+}
+
+// ─── Banners (Publicidad de Comercios) ──────────────────
+
+model Banner {
+  id            String   @id @default(cuid())
+  businessName  String
+  imageUrl      String
+  linkUrl       String?
+  position      Int      @default(0)
+  startDate     DateTime @default(now())
+  endDate       DateTime
+  amount        Decimal  @db.Decimal(10, 0)
+  note          String?
+  isActive      Boolean  @default(true)
+  clicks        Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  @@index([isActive, endDate])
+  @@index([position])
+  @@map("banners")
+}
+
+// ─── Promotions (Anuncios Destacados) ───────────────────
+
+model Promotion {
+  id         String   @id @default(cuid())
+  listingId  String
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  startDate  DateTime @default(now())
+  endDate    DateTime
+  amount     Decimal  @db.Decimal(10, 0)
+  note       String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@index([listingId])
+  @@index([endDate])
+  @@index([isActive])
+  @@map("promotions")
+}
+
+// ─── Adult Listings (Sección Adultos) ─────────────────
+
+model AdultListing {
+  id              String            @id @default(cuid())
+  code            String            @unique
+  alias           String
+  slug            String            @unique
+  title           String
+  description     String
+  serviceType     String
+  location        String
+  whatsapp        String?
+  isPhoneVisible  Boolean           @default(false)
+  revealCode      String?           @unique
+  codeExpiresAt   DateTime?
+  region          String?
+  comuna          String?
+  status          ListingStatus     @default(ACTIVE)
+  isFeatured      Boolean           @default(false)
+  viewCount       Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  images        AdultImage[]
+  messages      AdultMessage[]    @relation("AdultListingMessages")
+  promotions    AdultPromotion[]
+
+  @@index([userId])
+  @@index([status, isFeatured, createdAt(sort: Desc)])
+  @@index([region, comuna])
+  @@map("adult_listings")
+}
+
+model AdultImage {
+  id              String       @id @default(cuid())
+  url             String
+  order           Int          @default(0)
+  isPresentation  Boolean      @default(false)
+  isBlurred       Boolean      @default(false)
+  revealCode      String       @unique @default(cuid())
+  codeExpiresAt   DateTime?
+  createdAt       DateTime     @default(now())
+
+  adultListingId  String
+  adultListing    AdultListing @relation(fields: [adultListingId], references: [id], onDelete: Cascade)
+
+  @@index([adultListingId])
+  @@index([revealCode])
+  @@map("adult_images")
+}
+
+model AdultMessage {
+  id              String       @id @default(cuid())
+  content         String
+  senderPhone     String?
+  isRead          Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+
+  senderId        String
+  sender          User         @relation("AdultMsgSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId      String
+  receiver        User         @relation("AdultMsgReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  adultListingId  String
+  adultListing    AdultListing @relation("AdultListingMessages", fields: [adultListingId], references: [id], onDelete: Cascade)
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([adultListingId])
+  @@map("adult_messages")
+}
+
+model AdultPromotion {
+  id              String       @id @default(cuid())
+  adultListingId  String
+  adultListing    AdultListing @relation(fields: [adultListingId], references: [id], onDelete: Cascade)
+  startDate       DateTime     @default(now())
+  endDate         DateTime
+  amount          Decimal      @db.Decimal(10, 0)
+  note            String?
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+
+  @@index([adultListingId])
+  @@index([endDate])
+  @@index([isActive])
+  @@map("adult_promotions")
+}
