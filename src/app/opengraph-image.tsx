@@ -146,7 +146,7 @@ export default async function OpengraphImage() {
               display: "flex",
             }}
           >
-            lacuevita.com
+            tucuevita.com
           </div>
         </div>
       </div>

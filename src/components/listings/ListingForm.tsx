@@ -305,7 +305,7 @@ export default function ListingForm({
           </h1>
           <p className="text-on-surface-variant text-lg">
             {mode === "create"
-              ? "Vende lo que ya no usas en La Cuevita, el rincón de la comunidad cubana."
+              ? "Publica lo que vendes en La Cuevita, el rincón de la comunidad cubana."
               : "Modifica los datos de tu anuncio y guarda los cambios."}
           </p>
         </header>

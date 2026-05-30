@@ -1,6 +1,6 @@
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://www.lacuevita.com";
+  "https://www.tucuevita.com";
 
 export const SITE_NAME = "La Cuevita";
 

@@ -68,7 +68,7 @@ export default function TerminosPage() {
             </h2>
             <p>
               La Cuevita es un espacio digital comunitario que permite a sus usuarios
-              publicar, buscar y contactar vendedores de artículos de segunda mano y servicios
+              publicar, buscar y contactar vendedores de productos nuevos y usados, servicios
               locales. <strong>La Plataforma actúa únicamente como intermediario tecnológico</strong> y
               no participa en las transacciones entre usuarios, no verifica la calidad de los
               productos publicados, ni garantiza la veracidad de la información proporcionada por los

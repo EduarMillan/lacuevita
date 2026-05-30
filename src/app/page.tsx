@@ -56,8 +56,8 @@ export default async function Home() {
               </div>
 
               <p className="text-base sm:text-xl text-on-surface-variant mb-6 sm:mb-10 max-w-lg leading-relaxed font-medium">
-                Donde los objetos usados encuentran nuevas historias. Compra,
-                vende e intercambia con vecinos de confianza.
+                Compra, vende e intercambia productos nuevos y usados,
+                servicios y mucho más con vecinos de toda Cuba.
               </p>
 
               <div className="flex flex-wrap gap-3 sm:gap-4">
