@@ -4,6 +4,10 @@ import { categories } from "@/lib/categories";
 
 export const revalidate = 3600;
 
+// La sección /adultos se excluye intencionalmente del sitemap.
+// No queremos que Google indexe contenido adulto.
+const EXCLUDED_SLUGS = new Set(["adultos"]);
+
 const STATIC_PATHS: Array<{
   path: string;
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
@@ -29,27 +33,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: entry.priority,
   }));
 
-  const categoryEntries: MetadataRoute.Sitemap = categories.flatMap((cat) => {
-    const parent = {
-      url: `${SITE_URL}/categorias/${cat.slug}`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    };
-    const children = (cat.children ?? []).map((sub) => ({
-      url: `${SITE_URL}/categorias/${sub.slug}`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.6,
-    }));
-    return [parent, ...children];
-  });
+  const categoryEntries: MetadataRoute.Sitemap = categories
+    .filter((cat) => !EXCLUDED_SLUGS.has(cat.slug))
+    .flatMap((cat) => {
+      const parent = {
+        url: `${SITE_URL}/categorias/${cat.slug}`,
+        lastModified: now,
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      };
+      const children = (cat.children ?? [])
+        .filter((sub) => !EXCLUDED_SLUGS.has(sub.slug))
+        .map((sub) => ({
+          url: `${SITE_URL}/categorias/${sub.slug}`,
+          lastModified: now,
+          changeFrequency: "weekly" as const,
+          priority: 0.6,
+        }));
+      return [parent, ...children];
+    });
 
   let listingEntries: MetadataRoute.Sitemap = [];
   try {
     const { prisma } = await import("@/lib/db");
     const listings = await prisma.listing.findMany({
-      where: { status: "ACTIVE" },
+      where: {
+        status: "ACTIVE",
+        category: {
+          NOT: [
+            { slug: { in: Array.from(EXCLUDED_SLUGS) } },
+            { parent: { slug: { in: Array.from(EXCLUDED_SLUGS) } } },
+          ],
+        },
+      },
       select: {
         slug: true,
         updatedAt: true,
