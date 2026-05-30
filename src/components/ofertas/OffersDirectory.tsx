@@ -31,11 +31,7 @@ interface Pagination {
   totalPages: number;
 }
 
-const FEATURED_PLANS = [
-  { days: 7, price: "$500 CUP", label: "7 días" },
-  { days: 15, price: "$900 CUP", label: "15 días" },
-  { days: 30, price: "$1500 CUP", label: "30 días" },
-];
+import { usePricingPlans } from "@/hooks/usePricingPlans";
 
 interface SlotInfo {
   total: number;
@@ -55,6 +51,7 @@ export default function OffersDirectory() {
   const [publishedOffer, setPublishedOffer] = useState<{ code: string; region: string; title: string } | null>(null);
   const [slotInfo, setSlotInfo] = useState<SlotInfo | null>(null);
   const [selectedPlan, setSelectedPlan] = useState(0);
+  const { plans: featuredPlans } = usePricingPlans("OFFER_FEATURED");
 
   const selectedRegion: Region | undefined = regions.find(
     (r) => r.id === regionId,
@@ -95,13 +92,14 @@ export default function OffersDirectory() {
   }
 
   function buildWhatsAppUrl(code: string, title: string, planIndex: number) {
-    const plan = FEATURED_PLANS[planIndex];
+    const plan = featuredPlans[planIndex];
     const phone = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP || "";
+    const planLabel = plan ? `${plan.label} (${plan.price})` : "Sin plan seleccionado";
     const message = encodeURIComponent(
       `Hola! Quiero destacar mi oferta:\n\n` +
       `Codigo: ${code}\n` +
       `Titulo: ${title}\n` +
-      `Plan: ${plan.label} (${plan.price})\n\n` +
+      `Plan: ${planLabel}\n\n` +
       `Quedo atento, gracias!`
     );
     return `https://wa.me/${phone}?text=${message}`;
@@ -237,10 +235,10 @@ export default function OffersDirectory() {
 
                 {/* Plan picker + WhatsApp */}
                 <div className="space-y-2.5 sm:space-y-3 mt-2 sm:mt-3">
-                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-                    {FEATURED_PLANS.map((plan, i) => (
+                  <div className={`grid gap-1.5 sm:gap-2 ${featuredPlans.length <= 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+                    {featuredPlans.map((plan, i) => (
                       <button
-                        key={plan.days}
+                        key={plan.id}
                         type="button"
                         onClick={() => setSelectedPlan(i)}
                         className={`text-center rounded-lg py-1.5 sm:py-2 px-1 transition-all border-2 ${
@@ -253,6 +251,11 @@ export default function OffersDirectory() {
                         <p className="text-[11px] sm:text-sm font-extrabold text-amber-950">{plan.price}</p>
                       </button>
                     ))}
+                    {featuredPlans.length === 0 && (
+                      <p className="col-span-3 text-xs text-amber-900/70 italic py-2 text-center">
+                        Sin planes disponibles
+                      </p>
+                    )}
                   </div>
                   <a
                     href={buildWhatsAppUrl(publishedOffer.code, publishedOffer.title, selectedPlan)}

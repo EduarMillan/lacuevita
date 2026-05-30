@@ -8,6 +8,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { createClient } from "@/lib/supabase/client";
 import { regions } from "@/lib/regions";
 import imageCompression from "browser-image-compression";
+import { usePricingPlans } from "@/hooks/usePricingPlans";
 
 const SERVICE_TYPES = [
   "Masajes",
@@ -20,6 +21,7 @@ const SERVICE_TYPES = [
 
 export default function PublicarAdultoPage() {
   const router = useRouter();
+  const { plans: featuredPlans } = usePricingPlans("ADULT_FEATURED");
   const [alias, setAlias] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -470,17 +472,18 @@ export default function PublicarAdultoPage() {
                       <span className="material-symbols-outlined text-base text-rose-500">sell</span>
                       Planes disponibles
                     </h4>
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { days: "7 días", price: "$500 CUP" },
-                        { days: "15 días", price: "$900 CUP" },
-                        { days: "30 días", price: "$1500 CUP" },
-                      ].map((plan) => (
-                        <div key={plan.days} className="text-center bg-rose-100/60 rounded-lg py-3 px-2">
-                          <p className="text-xs font-bold text-rose-800">{plan.days}</p>
+                    <div className={`grid gap-3 ${featuredPlans.length <= 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+                      {featuredPlans.map((plan) => (
+                        <div key={plan.id} className="text-center bg-rose-100/60 rounded-lg py-3 px-2">
+                          <p className="text-xs font-bold text-rose-800">{plan.label}</p>
                           <p className="text-lg font-extrabold text-rose-950">{plan.price}</p>
                         </div>
                       ))}
+                      {featuredPlans.length === 0 && (
+                        <p className="col-span-3 text-xs text-rose-900/70 italic py-2 text-center">
+                          Cargando planes…
+                        </p>
+                      )}
                     </div>
                   </div>
 

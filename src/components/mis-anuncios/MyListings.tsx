@@ -62,11 +62,7 @@ function timeAgo(date: string): string {
   return `Hace ${months} mes${months > 1 ? "es" : ""}`;
 }
 
-const FEATURED_PLANS = [
-  { days: 7, price: "$500 CUP", label: "7 días" },
-  { days: 15, price: "$900 CUP", label: "15 días" },
-  { days: 30, price: "$1500 CUP", label: "30 días" },
-];
+import { usePricingPlans } from "@/hooks/usePricingPlans";
 
 interface SlotInfo {
   total: number;
@@ -386,6 +382,7 @@ function ListingCard({
 }) {
   const [cardSlots, setCardSlots] = useState<SlotInfo | null>(null);
   const [slotsFetched, setSlotsFetched] = useState(false);
+  const { plans: featuredPlans } = usePricingPlans("LISTING_FEATURED");
 
   const st = statusLabels[listing.status] || statusLabels.ACTIVE;
 
@@ -409,13 +406,14 @@ function ListingCard({
   }, [isPromoting, listing.category?.slug]);
 
   function buildWhatsAppUrl() {
-    const plan = FEATURED_PLANS[selectedPlan];
+    const plan = featuredPlans[selectedPlan];
     const phone = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP || "";
+    const planLabel = plan ? `${plan.label} (${plan.price})` : "Sin plan seleccionado";
     const message = encodeURIComponent(
       `Hola! Quiero destacar mi anuncio:\n\n` +
       `Codigo: ${listing.code}\n` +
       `Titulo: ${listing.title}\n` +
-      `Plan: ${plan.label} (${plan.price})\n\n` +
+      `Plan: ${planLabel}\n\n` +
       `Quedo atento, gracias!`
     );
     return `https://wa.me/${phone}?text=${message}`;
@@ -581,10 +579,10 @@ function ListingCard({
               Selecciona un plan y solicita por WhatsApp:
             </p>
 
-            <div className="grid grid-cols-3 gap-1.5">
-              {FEATURED_PLANS.map((plan, i) => (
+            <div className={`grid gap-1.5 ${featuredPlans.length <= 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+              {featuredPlans.map((plan, i) => (
                 <button
-                  key={plan.days}
+                  key={plan.id}
                   type="button"
                   onClick={() => onSelectPlan(i)}
                   className={`text-center rounded-lg py-2 px-1 transition-all border-2 ${
@@ -597,6 +595,11 @@ function ListingCard({
                   <p className="text-xs sm:text-sm font-extrabold text-amber-950">{plan.price}</p>
                 </button>
               ))}
+              {featuredPlans.length === 0 && (
+                <p className="col-span-3 text-xs text-amber-900/70 italic py-2 text-center">
+                  Sin planes disponibles
+                </p>
+              )}
             </div>
 
             <a

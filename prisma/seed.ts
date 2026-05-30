@@ -164,6 +164,47 @@ async function main() {
     }
   }
 
+  console.log("Seeding pricing plans...");
+
+  const pricingPlans = [
+    // Anuncios destacados (marketplace)
+    { type: "LISTING_FEATURED", days: 7, amount: 500 },
+    { type: "LISTING_FEATURED", days: 15, amount: 900 },
+    { type: "LISTING_FEATURED", days: 30, amount: 1500 },
+
+    // Ofertas destacadas (comercios)
+    { type: "OFFER_FEATURED", days: 7, amount: 500 },
+    { type: "OFFER_FEATURED", days: 15, amount: 900 },
+    { type: "OFFER_FEATURED", days: 30, amount: 1500 },
+
+    // Anuncios adultos destacados
+    { type: "ADULT_FEATURED", days: 7, amount: 500 },
+    { type: "ADULT_FEATURED", days: 15, amount: 900 },
+    { type: "ADULT_FEATURED", days: 30, amount: 1500 },
+
+    // Banners publicitarios
+    { type: "BANNER", days: 3, amount: 300 },
+    { type: "BANNER", days: 7, amount: 700 },
+    { type: "BANNER", days: 15, amount: 1300 },
+    { type: "BANNER", days: 30, amount: 2500 },
+  ] as const;
+
+  for (let i = 0; i < pricingPlans.length; i++) {
+    const plan = pricingPlans[i];
+    await prisma.pricingPlan.upsert({
+      where: { type_days: { type: plan.type, days: plan.days } },
+      update: {}, // do not overwrite if admin already edited
+      create: {
+        type: plan.type,
+        days: plan.days,
+        amount: plan.amount,
+        currency: "CUP",
+        order: i,
+        isActive: true,
+      },
+    });
+  }
+
   console.log("Seeding complete!");
 }
 

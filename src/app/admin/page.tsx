@@ -36,6 +36,7 @@ const statusColors: Record<string, string> = {
 };
 
 import { formatPrice } from "@/lib/format";
+import PricingManager from "@/components/admin/PricingManager";
 
 function daysRemaining(endDate: string): number {
   return Math.max(0, Math.ceil((new Date(endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
@@ -846,127 +847,7 @@ export default function AdminPage() {
       </>)}
 
       {/* ─── PRICING TAB ─── */}
-      {activeTab === "pricing" && (
-        <div className="space-y-8">
-          <p className="text-sm text-on-surface-variant">
-            Guía de precios sugeridos para los servicios de la plataforma. Estos valores son referenciales para el cobro manual.
-          </p>
-
-          {/* Anuncios Destacados */}
-          <div className="bg-surface-lowest rounded-2xl p-6 border border-outline-variant/15">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center">
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-on-surface">Anuncios Destacados</h3>
-                <p className="text-xs text-on-surface-variant">El anuncio aparece primero en su categoría y en la página principal</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              {[
-                { days: 3, price: "$300 CUP" },
-                { days: 7, price: "$700 CUP" },
-                { days: 15, price: "$1300 CUP" },
-                { days: 30, price: "$14.990" },
-                { days: 60, price: "$24.990" },
-                { days: 90, price: "$34.990" },
-              ].map((plan) => (
-                <div key={plan.days} className="bg-amber-50/50 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-black text-amber-700">{plan.days}</div>
-                  <div className="text-xs text-on-surface-variant mb-2">días</div>
-                  <div className="text-sm font-bold text-on-surface">{plan.price}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 text-xs text-on-surface-variant space-y-1">
-              <p>• Máximo 8 anuncios destacados por categoría</p>
-              <p>• Los destacados se muestran con borde dorado y estrella</p>
-              <p>• Al expirar, el anuncio vuelve a su posición normal automáticamente</p>
-            </div>
-          </div>
-
-          {/* Ofertas Destacadas */}
-          <div className="bg-surface-lowest rounded-2xl p-6 border border-outline-variant/15">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-rose-100 text-rose-700 rounded-full flex items-center justify-center">
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-on-surface">Ofertas Destacadas</h3>
-                <p className="text-xs text-on-surface-variant">La oferta aparece primero en la sección de ofertas</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              {[
-                { days: 7, price: "$500 CUP" },
-                { days: 15, price: "$1100 CUP" },
-                { days: 30, price: "$11.990" },
-                { days: 60, price: "$3000 CUP" },
-                { days: 90, price: "$27.990" },
-              ].map((plan) => (
-                <div key={plan.days} className="bg-rose-50/50 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-black text-rose-700">{plan.days}</div>
-                  <div className="text-xs text-on-surface-variant mb-2">días</div>
-                  <div className="text-sm font-bold text-on-surface">{plan.price}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 text-xs text-on-surface-variant space-y-1">
-              <p>• Las ofertas destacadas se muestran primero en el directorio de ofertas</p>
-              <p>• Incluyen badge visual de &quot;Destacado&quot;</p>
-            </div>
-          </div>
-
-          {/* Banners */}
-          <div className="bg-surface-lowest rounded-2xl p-6 border border-outline-variant/15">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 bg-violet-100 text-violet-700 rounded-full flex items-center justify-center">
-                <span className="material-symbols-outlined">ad</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-on-surface">Banners Publicitarios</h3>
-                <p className="text-xs text-on-surface-variant">Banner rotativo visible en la página principal para comercios</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-              {[
-                { days: 7, price: "$14.990" },
-                { days: 15, price: "$24.990" },
-                { days: 30, price: "$6000 CUP" },
-                { days: 60, price: "$10500 CUP" },
-                { days: 90, price: "$94.990" },
-              ].map((plan) => (
-                <div key={plan.days} className="bg-violet-50/50 rounded-xl p-4 text-center">
-                  <div className="text-2xl font-black text-violet-700">{plan.days}</div>
-                  <div className="text-xs text-on-surface-variant mb-2">días</div>
-                  <div className="text-sm font-bold text-on-surface">{plan.price}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 text-xs text-on-surface-variant space-y-1">
-              <p>• Máximo 5 banners activos simultáneamente</p>
-              <p>• Se rotan automáticamente en la página principal</p>
-              <p>• Incluyen link al sitio web o red social del comercio</p>
-              <p>• Se registran los clicks para métricas</p>
-            </div>
-          </div>
-
-          {/* Nota general */}
-          <div className="bg-teal-50/50 rounded-2xl p-6 border border-teal-200/30">
-            <div className="flex items-start gap-3">
-              <span className="material-symbols-outlined text-teal-700 mt-0.5">info</span>
-              <div className="text-sm text-on-surface-variant space-y-2">
-                <p className="font-semibold text-on-surface">Notas generales</p>
-                <p>• Los pagos se gestionan manualmente (transferencia bancaria, efectivo, etc.)</p>
-                <p>• Al recibir el pago, activar la promoción desde la pestaña correspondiente</p>
-                <p>• Publicar un anuncio es gratuito (máximo 10 imágenes por anuncio)</p>
-                <p>• Los precios pueden ajustarse según demanda y temporada</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {activeTab === "pricing" && <PricingManager />}
 
       {/* ─── BANNERS TAB ─── */}
       {activeTab === "banners" && (

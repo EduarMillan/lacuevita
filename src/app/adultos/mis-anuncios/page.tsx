@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AgeGate from "@/components/adultos/AgeGate";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import { usePricingPlans } from "@/hooks/usePricingPlans";
 
 interface AdultImageOwner {
   id: string;
@@ -48,15 +49,12 @@ export default function MisAnunciosAdultosPage() {
   const [copiedCode, setCopiedCode] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
 
-  const FEATURED_PLANS = [
-    { days: 7, label: "7 días", price: "$500 CUP" },
-    { days: 15, label: "15 días", price: "$900 CUP" },
-    { days: 30, label: "30 días", price: "$1500 CUP" },
-  ];
+  const { plans: featuredPlans } = usePricingPlans("ADULT_FEATURED");
 
   function buildWhatsAppUrl(listing: MyAdultListing) {
-    const plan = FEATURED_PLANS[selectedPlan];
-    const text = `Hola, quiero destacar mi anuncio en la sección adultos de La Cuevita.\n\nCódigo: ${listing.code}\nAnuncio: ${listing.title}\nPlan: ${plan.label} (${plan.price})`;
+    const plan = featuredPlans[selectedPlan];
+    const planLabel = plan ? `${plan.label} (${plan.price})` : "Sin plan seleccionado";
+    const text = `Hola, quiero destacar mi anuncio en la sección adultos de La Cuevita.\n\nCódigo: ${listing.code}\nAnuncio: ${listing.title}\nPlan: ${planLabel}`;
     const phone = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "";
     return `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
   }
@@ -220,10 +218,10 @@ export default function MisAnunciosAdultosPage() {
                       <p className="text-[10px] sm:text-xs text-amber-900/80 leading-relaxed mb-3">
                         Selecciona un plan y solicita por WhatsApp:
                       </p>
-                      <div className="grid grid-cols-3 gap-2">
-                        {FEATURED_PLANS.map((plan, i) => (
+                      <div className={`grid gap-2 ${featuredPlans.length <= 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+                        {featuredPlans.map((plan, i) => (
                           <button
-                            key={plan.days}
+                            key={plan.id}
                             type="button"
                             onClick={() => setSelectedPlan(i)}
                             className={`text-center rounded-lg py-2.5 px-1 transition-all border-2 ${

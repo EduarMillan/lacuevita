@@ -368,6 +368,33 @@ model AdultMessage {
   @@map("adult_messages")
 }
 
+// ─── Pricing Plans (editable from admin) ─────────────────
+
+enum PlanType {
+  LISTING_FEATURED
+  OFFER_FEATURED
+  BANNER
+  ADULT_FEATURED
+}
+
+model PricingPlan {
+  id        String   @id @default(cuid())
+  type      PlanType
+  days      Int
+  amount    Decimal  @db.Decimal(10, 2)
+  currency  String   @default("CUP")
+  label     String?  // optional friendly label like "Plan Mensual"
+  note      String?  // optional description for admin/user
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([type, days])
+  @@index([type, isActive, order])
+  @@map("pricing_plans")
+}
+
 model AdultPromotion {
   id              String       @id @default(cuid())
   adultListingId  String

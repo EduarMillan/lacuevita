@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { regions } from "@/lib/regions";
+import { usePricingPlans } from "@/hooks/usePricingPlans";
 
 interface Promotion {
   id: string;
@@ -28,18 +29,13 @@ interface MyOffer {
   promotions: Promotion[];
 }
 
-const FEATURED_PLANS = [
-  { days: 7, label: "7 días", price: "$500 CUP" },
-  { days: 15, label: "15 días", price: "$900 CUP" },
-  { days: 30, label: "30 días", price: "$1500 CUP" },
-];
-
 export default function MisOfertasPage() {
   const [offers, setOffers] = useState<MyOffer[]>([]);
   const [loading, setLoading] = useState(true);
   const [promoting, setPromoting] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState(0);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const { plans: featuredPlans } = usePricingPlans("OFFER_FEATURED");
 
   useEffect(() => {
     fetch("/api/ofertas/mis-ofertas")
@@ -50,8 +46,9 @@ export default function MisOfertasPage() {
   }, []);
 
   function buildWhatsAppUrl(offer: MyOffer) {
-    const plan = FEATURED_PLANS[selectedPlan];
-    const text = `Hola, quiero destacar mi oferta en La Cuevita.\n\nCódigo: ${offer.code}\nOferta: ${offer.title}\nNegocio: ${offer.businessName}\nPlan: ${plan.label} (${plan.price})`;
+    const plan = featuredPlans[selectedPlan];
+    const planLabel = plan ? `${plan.label} (${plan.price})` : "Sin plan seleccionado";
+    const text = `Hola, quiero destacar mi oferta en La Cuevita.\n\nCódigo: ${offer.code}\nOferta: ${offer.title}\nNegocio: ${offer.businessName}\nPlan: ${planLabel}`;
     const phone = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "";
     return `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
   }
@@ -191,10 +188,10 @@ export default function MisOfertasPage() {
                       <p className="text-[10px] sm:text-xs text-amber-900/80 leading-relaxed mb-3">
                         Selecciona un plan y solicita por WhatsApp:
                       </p>
-                      <div className="grid grid-cols-3 gap-2">
-                        {FEATURED_PLANS.map((plan, i) => (
+                      <div className={`grid gap-2 ${featuredPlans.length <= 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+                        {featuredPlans.map((plan, i) => (
                           <button
-                            key={plan.days}
+                            key={plan.id}
                             type="button"
                             onClick={() => setSelectedPlan(i)}
                             className={`text-center rounded-lg py-2.5 px-1 transition-all border-2 ${

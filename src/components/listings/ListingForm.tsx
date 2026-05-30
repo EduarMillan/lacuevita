@@ -8,6 +8,7 @@ import { processImage, revokePreview, type ProcessedImage } from "@/lib/image-ut
 import { categories } from "@/lib/categories";
 import { regions } from "@/lib/regions";
 import { CURRENCIES, type Currency } from "@/lib/format";
+import { usePricingPlans } from "@/hooks/usePricingPlans";
 
 const MAX_IMAGES = 10;
 
@@ -58,6 +59,7 @@ export default function ListingForm({
 }) {
   const router = useRouter();
   const supabase = createClient();
+  const { plans: featuredPlans } = usePricingPlans("LISTING_FEATURED");
 
   const [userId, setUserId] = useState("");
   const [imageItems, setImageItems] = useState<ImageItem[]>([]);
@@ -698,17 +700,18 @@ export default function ListingForm({
                       <span className="material-symbols-outlined text-base text-amber-600">sell</span>
                       Planes disponibles
                     </h4>
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { days: "7 días", price: "$500 CUP" },
-                        { days: "15 días", price: "$900 CUP" },
-                        { days: "30 días", price: "$1500 CUP" },
-                      ].map((plan) => (
-                        <div key={plan.days} className="text-center bg-amber-100/60 rounded-lg py-3 px-2">
-                          <p className="text-xs font-bold text-amber-800">{plan.days}</p>
+                    <div className={`grid gap-3 ${featuredPlans.length <= 3 ? "grid-cols-3" : "grid-cols-2 sm:grid-cols-4"}`}>
+                      {featuredPlans.map((plan) => (
+                        <div key={plan.id} className="text-center bg-amber-100/60 rounded-lg py-3 px-2">
+                          <p className="text-xs font-bold text-amber-800">{plan.label}</p>
                           <p className="text-lg font-extrabold text-amber-950">{plan.price}</p>
                         </div>
                       ))}
+                      {featuredPlans.length === 0 && (
+                        <p className="col-span-3 text-xs text-amber-900/70 italic py-2 text-center">
+                          Cargando planes…
+                        </p>
+                      )}
                     </div>
                   </div>
 
