@@ -75,6 +75,9 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   category: "marketplace",
+  verification: {
+    google: "XFEwNKjcLiISKOQKlXs7RyK3vyxnuBE7IwEZ3ZfDvmU",
+  },
 };
 
 export const viewport: Viewport = {
