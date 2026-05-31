@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const parentSlug = "parent" in category ? category.parent?.slug : undefined;
   const isAdult = ADULT_SLUGS.has(slug) || (parentSlug && ADULT_SLUGS.has(parentSlug));
   const path = `/categorias/${slug}`;
-  const title = `${category.name} — Anuncios en La Cuevita`;
+  const title = `${category.name} — Anuncios en Tu Cuevita`;
   const description = `Encuentra anuncios de ${category.name.toLowerCase()} en ${SITE_NAME}. Publica gratis y compra a vendedores verificados en Cuba.`;
 
   return {

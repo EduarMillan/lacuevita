@@ -54,7 +54,7 @@ export default function MisAnunciosAdultosPage() {
   function buildWhatsAppUrl(listing: MyAdultListing) {
     const plan = featuredPlans[selectedPlan];
     const planLabel = plan ? `${plan.label} (${plan.price})` : "Sin plan seleccionado";
-    const text = `Hola, quiero destacar mi anuncio en la sección adultos de La Cuevita.\n\nCódigo: ${listing.code}\nAnuncio: ${listing.title}\nPlan: ${planLabel}`;
+    const text = `Hola, quiero destacar mi anuncio en la sección adultos de Tu Cuevita.\n\nCódigo: ${listing.code}\nAnuncio: ${listing.title}\nPlan: ${planLabel}`;
     const phone = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "";
     return `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
   }

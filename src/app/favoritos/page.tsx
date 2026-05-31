@@ -2,8 +2,8 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import MyFavorites from "@/components/favoritos/MyFavorites";
 
 export const metadata = {
-  title: "Mis Favoritos | La Cuevita",
-  description: "Tus anuncios guardados en La Cuevita.",
+  title: "Mis Favoritos | Tu Cuevita",
+  description: "Tus anuncios guardados en Tu Cuevita.",
 };
 
 export default function FavoritosPage() {

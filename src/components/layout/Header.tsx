@@ -125,7 +125,7 @@ export default function Header() {
           </div>
           <div className="flex flex-col leading-none">
             <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">
-              La
+              Tu
             </span>
             <span className="text-lg font-black bg-gradient-to-r from-teal-700 via-primary to-cyan-600 bg-clip-text text-transparent -mt-0.5">
               Cuevita

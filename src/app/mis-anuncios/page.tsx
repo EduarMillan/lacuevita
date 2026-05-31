@@ -2,8 +2,8 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import MyListings from "@/components/mis-anuncios/MyListings";
 
 export const metadata = {
-  title: "Mis Anuncios | La Cuevita",
-  description: "Gestiona tus anuncios publicados en La Cuevita.",
+  title: "Mis Anuncios | Tu Cuevita",
+  description: "Gestiona tus anuncios publicados en Tu Cuevita.",
 };
 
 export default async function MisAnunciosPage({

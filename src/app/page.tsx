@@ -134,7 +134,7 @@ export default async function Home() {
                 <div className="aspect-[4/3] sm:aspect-[4/3] lg:aspect-4/5 rounded-[2rem] lg:rounded-[3rem] overflow-hidden shadow-[0_20px_60px_-10px_rgba(0,0,0,0.2)] lg:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] relative bg-white border-4 lg:border-[6px] border-white lg:rotate-2 transform transition-all hover:rotate-0 hover:scale-[1.02] duration-700">
                   <Image
                     src="/imagen_portada.avif"
-                    alt="La Cuevita - Marketplace de la comunidad"
+                    alt="Tu Cuevita - Marketplace de la comunidad"
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     priority

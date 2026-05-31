@@ -5,7 +5,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Centro de Ayuda",
   description:
-    "Aprende a usar La Cuevita: cómo publicar, buscar, contactar vendedores y más.",
+    "Aprende a usar Tu Cuevita: cómo publicar, buscar, contactar vendedores y más.",
   alternates: { canonical: "/ayuda" },
 };
 
@@ -38,7 +38,7 @@ const faqs = [
     icon: "call",
     question: "¿Cómo contacto a un vendedor?",
     answer:
-      "Entra al anuncio que te interesa y verás los botones de \"Llamar al Vendedor\" y \"WhatsApp\". El contacto es directo entre comprador y vendedor — La Cuevita no interviene en la comunicación ni en la transacción.",
+      "Entra al anuncio que te interesa y verás los botones de \"Llamar al Vendedor\" y \"WhatsApp\". El contacto es directo entre comprador y vendedor — Tu Cuevita no interviene en la comunicación ni en la transacción.",
   },
   {
     icon: "favorite",
@@ -68,7 +68,7 @@ const faqs = [
     icon: "security",
     question: "¿Es seguro comprar y vender aquí?",
     answer:
-      "La Cuevita es un espacio para que la comunidad publique y encuentre artículos. Te recomendamos: verificar el producto antes de pagar, reunirte en lugares públicos y seguros, no enviar dinero por adelantado, y desconfiar de ofertas demasiado buenas para ser verdad.",
+      "Tu Cuevita es un espacio para que la comunidad publique y encuentre artículos. Te recomendamos: verificar el producto antes de pagar, reunirte en lugares públicos y seguros, no enviar dinero por adelantado, y desconfiar de ofertas demasiado buenas para ser verdad.",
   },
   {
     icon: "report",

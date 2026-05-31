@@ -5,7 +5,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Política de Privacidad",
   description:
-    "Política de privacidad y protección de datos de La Cuevita.",
+    "Política de privacidad y protección de datos de Tu Cuevita.",
   alternates: { canonical: "/privacidad" },
 };
 
@@ -54,7 +54,7 @@ export default function PrivacidadPage() {
               1. Información que recopilamos
             </h2>
             <p>
-              Al usar <strong>La Cuevita</strong>, podemos recopilar la siguiente
+              Al usar <strong>Tu Cuevita</strong>, podemos recopilar la siguiente
               información:
             </p>
 
@@ -245,7 +245,7 @@ export default function PrivacidadPage() {
               8. Menores de edad
             </h2>
             <p>
-              La Cuevita no está dirigida a menores de 18 años. No recopilamos
+              Tu Cuevita no está dirigida a menores de 18 años. No recopilamos
               intencionalmente información de menores. Si descubrimos que un menor ha creado una
               cuenta, la eliminaremos junto con toda la información asociada.
             </p>
@@ -279,7 +279,7 @@ export default function PrivacidadPage() {
           {/* Separator */}
           <div className="border-t border-outline-variant/20 pt-8 mt-8">
             <p className="text-center text-sm text-on-surface-variant/60">
-              Al utilizar La Cuevita, confirmas que has leído y aceptado esta Política
+              Al utilizar Tu Cuevita, confirmas que has leído y aceptado esta Política
               de Privacidad.
             </p>
             <div className="text-center mt-6">

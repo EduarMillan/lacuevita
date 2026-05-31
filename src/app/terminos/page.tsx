@@ -5,7 +5,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Términos y Condiciones",
   description:
-    "Términos y condiciones de uso de la plataforma La Cuevita.",
+    "Términos y condiciones de uso de la plataforma Tu Cuevita.",
   alternates: { canonical: "/terminos" },
 };
 
@@ -54,7 +54,7 @@ export default function TerminosPage() {
               1. Aceptación de los términos
             </h2>
             <p>
-              Al acceder, registrarte o utilizar la plataforma <strong>La Cuevita</strong> (en
+              Al acceder, registrarte o utilizar la plataforma <strong>Tu Cuevita</strong> (en
               adelante, &quot;la Plataforma&quot;), aceptas cumplir estos Términos y Condiciones en su
               totalidad. Si no estás de acuerdo con alguna de estas disposiciones, te pedimos que no
               utilices la Plataforma.
@@ -67,7 +67,7 @@ export default function TerminosPage() {
               2. Naturaleza de la Plataforma
             </h2>
             <p>
-              La Cuevita es un espacio digital comunitario que permite a sus usuarios
+              Tu Cuevita es un espacio digital comunitario que permite a sus usuarios
               publicar, buscar y contactar vendedores de productos nuevos y usados, servicios
               locales. <strong>La Plataforma actúa únicamente como intermediario tecnológico</strong> y
               no participa en las transacciones entre usuarios, no verifica la calidad de los
@@ -75,7 +75,7 @@ export default function TerminosPage() {
               anunciantes.
             </p>
             <p className="mt-2">
-              La Cuevita es un emprendimiento independiente, no constituye una empresa
+              Tu Cuevita es un emprendimiento independiente, no constituye una empresa
               formalmente establecida y no ofrece garantías comerciales de ningún tipo.
             </p>
           </div>
@@ -86,7 +86,7 @@ export default function TerminosPage() {
               3. Exención de responsabilidad
             </h2>
             <p>
-              <strong>La Cuevita no se hace responsable, bajo ninguna circunstancia,
+              <strong>Tu Cuevita no se hace responsable, bajo ninguna circunstancia,
               por:</strong>
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-1.5">
@@ -180,7 +180,7 @@ export default function TerminosPage() {
               </li>
             </ul>
             <p className="mt-2">
-              La Cuevita se reserva el derecho de suspender o eliminar cuentas que
+              Tu Cuevita se reserva el derecho de suspender o eliminar cuentas que
               infrinjan estos términos o que permanezcan inactivas por períodos prolongados.
             </p>
           </div>
@@ -229,7 +229,7 @@ export default function TerminosPage() {
               8. Propiedad intelectual
             </h2>
             <p>
-              El diseño, logotipo, nombre y estructura de La Cuevita son propiedad de sus
+              El diseño, logotipo, nombre y estructura de Tu Cuevita son propiedad de sus
               creadores. Las imágenes y contenidos publicados por los usuarios son responsabilidad
               exclusiva de quienes los publican, y no podrán infringir derechos de autor o propiedad
               intelectual de terceros.
@@ -255,7 +255,7 @@ export default function TerminosPage() {
               10. Modificaciones a los términos
             </h2>
             <p>
-              La Cuevita se reserva el derecho de actualizar estos Términos y Condiciones
+              Tu Cuevita se reserva el derecho de actualizar estos Términos y Condiciones
               en cualquier momento. Las modificaciones entrarán en vigor desde su publicación en la
               Plataforma. El uso continuado del servicio después de cualquier cambio implica la
               aceptación de los nuevos términos.
@@ -288,7 +288,7 @@ export default function TerminosPage() {
           {/* Separator */}
           <div className="border-t border-outline-variant/20 pt-8 mt-8">
             <p className="text-center text-sm text-on-surface-variant/60">
-              Al utilizar La Cuevita, confirmas que has leído, entendido y aceptado estos
+              Al utilizar Tu Cuevita, confirmas que has leído, entendido y aceptado estos
               Términos y Condiciones en su totalidad.
             </p>
             <div className="text-center mt-6">

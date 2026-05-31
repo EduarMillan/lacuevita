@@ -19,7 +19,7 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <div className="text-lg font-black text-white mb-4">
-            La Cuevita
+            Tu Cuevita
           </div>
           <p className="text-teal-300/60 text-sm leading-relaxed">
             El rincón de la comunidad cubana. Compra, vende e intercambia con
@@ -64,7 +64,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-teal-800/50 flex flex-col md:flex-row justify-between items-center gap-4">
         <span className="text-teal-600 text-xs uppercase tracking-widest">
-          © 2026 La Cuevita - Marketplace Comunitario
+          © 2026 Tu Cuevita - Marketplace Comunitario
         </span>
         <div className="flex gap-6">
           <span className="material-symbols-outlined text-teal-700">

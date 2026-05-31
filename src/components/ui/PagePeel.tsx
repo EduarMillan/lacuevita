@@ -6,7 +6,7 @@ export default function PagePeel() {
   const [open, setOpen] = useState(false);
 
   const phone = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP || "";
-  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent("Hola! Me interesa contratar un espacio de banner publicitario en La Cuevita. ¿Me pueden dar más información?")}`;
+  const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent("Hola! Me interesa contratar un espacio de banner publicitario en Tu Cuevita. ¿Me pueden dar más información?")}`;
 
   return (
     <>

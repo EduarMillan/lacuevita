@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Publicar anuncio",
-  description: "Publica tu anuncio gratis en La Cuevita.",
+  description: "Publica tu anuncio gratis en Tu Cuevita.",
   robots: { index: false, follow: false },
 };
 

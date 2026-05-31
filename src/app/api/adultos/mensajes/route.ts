@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
   if (listing.whatsapp) {
     const phone = listing.whatsapp.replace(/\D/g, "");
     const text = encodeURIComponent(
-      `Hola ${listing.alias}, te escribo por tu anuncio en La Cuevita.\n\nMi mensaje: ${content.trim()}\n\nMi WhatsApp: ${senderPhone.trim()}`
+      `Hola ${listing.alias}, te escribo por tu anuncio en Tu Cuevita.\n\nMi mensaje: ${content.trim()}\n\nMi WhatsApp: ${senderPhone.trim()}`
     );
     whatsappUrl = `https://wa.me/${phone}?text=${text}`;
   }

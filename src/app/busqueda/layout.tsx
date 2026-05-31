@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Buscar anuncios",
   description:
-    "Busca productos nuevos y usados, vehículos, vivienda, empleos y servicios en La Cuevita. Filtra por categoría, ubicación y precio.",
+    "Busca productos nuevos y usados, vehículos, vivienda, empleos y servicios en Tu Cuevita. Filtra por categoría, ubicación y precio.",
   alternates: { canonical: "/busqueda" },
 };
 

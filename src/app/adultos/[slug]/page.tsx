@@ -282,7 +282,7 @@ export default function AdultDetailPage() {
                   {/* WhatsApp contact button */}
                   {listing.whatsapp && (
                     <a
-                      href={`https://wa.me/${listing.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola, vi tu anuncio "${listing.title}" (código: ${listing.code}) en La Cuevita. Me gustaría solicitar el código de revelación de imágenes.`)}`}
+                      href={`https://wa.me/${listing.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(`Hola, vi tu anuncio "${listing.title}" (código: ${listing.code}) en Tu Cuevita. Me gustaría solicitar el código de revelación de imágenes.`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 bg-emerald-600 text-white px-6 py-3.5 rounded-2xl font-bold text-sm hover:bg-emerald-700 transition-colors"

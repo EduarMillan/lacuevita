@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { formatPrice, isCurrency } from "@/lib/format";
 
-export const alt = "Anuncio en La Cuevita";
+export const alt = "Anuncio en Tu Cuevita";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -164,7 +164,7 @@ export default async function ListingOG({
             }}
           >
             <span>🛍️</span>
-            <span>La Cuevita</span>
+            <span>Tu Cuevita</span>
           </div>
 
           {/* Title + meta */}
@@ -310,7 +310,7 @@ function fallbackImage() {
           fontFamily: "sans-serif",
         }}
       >
-        La Cuevita
+        Tu Cuevita
       </div>
     ),
     { ...size },

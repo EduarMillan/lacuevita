@@ -48,7 +48,7 @@ export default function MisOfertasPage() {
   function buildWhatsAppUrl(offer: MyOffer) {
     const plan = featuredPlans[selectedPlan];
     const planLabel = plan ? `${plan.label} (${plan.price})` : "Sin plan seleccionado";
-    const text = `Hola, quiero destacar mi oferta en La Cuevita.\n\nCódigo: ${offer.code}\nOferta: ${offer.title}\nNegocio: ${offer.businessName}\nPlan: ${planLabel}`;
+    const text = `Hola, quiero destacar mi oferta en Tu Cuevita.\n\nCódigo: ${offer.code}\nOferta: ${offer.title}\nNegocio: ${offer.businessName}\nPlan: ${planLabel}`;
     const phone = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || "";
     return `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
   }

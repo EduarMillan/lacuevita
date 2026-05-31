@@ -6,7 +6,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Todas las categorías",
   description:
-    "Explora todas las categorías de La Cuevita: vehículos, vivienda, electrónica, empleos, servicios y mucho más. Compra y vende en Cuba.",
+    "Explora todas las categorías de Tu Cuevita: vehículos, vivienda, electrónica, empleos, servicios y mucho más. Compra y vende en Cuba.",
   alternates: { canonical: "/categorias" },
 };
 
