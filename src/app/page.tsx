@@ -47,7 +47,7 @@ export default async function Home() {
 
                 <h1 className="leading-none">
                   <span className="block text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-[0.15em] text-teal-600 mb-1">
-                    La
+                    Tu
                   </span>
                   <span className="block text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter bg-linear-to-r from-teal-700 via-primary to-cyan-600 bg-clip-text text-transparent leading-none pb-3">
                     Cuevita
