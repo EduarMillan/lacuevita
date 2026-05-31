@@ -51,6 +51,14 @@ export default function PublicarAdultoPage() {
     setUploading(true);
     setError("");
     const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setError("Debes iniciar sesión para publicar.");
+      setUploading(false);
+      return;
+    }
 
     for (const file of files) {
       try {
@@ -60,7 +68,7 @@ export default function PublicarAdultoPage() {
           useWebWorker: true,
         });
         const ext = file.name.split(".").pop() || "jpg";
-        const path = `adultos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const path = `adultos/${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
         const { error: upErr } = await supabase.storage
           .from("listing-images")
           .upload(path, compressed, { cacheControl: "3600", upsert: false });
