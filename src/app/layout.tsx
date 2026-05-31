@@ -71,9 +71,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
   category: "marketplace",
   verification: {
     google: "XFEwNKjcLiISKOQKlXs7RyK3vyxnuBE7IwEZ3ZfDvmU",
