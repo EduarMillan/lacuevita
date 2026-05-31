@@ -1,9 +1,72 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import { regions } from "@/lib/regions";
+import { absoluteUrl, SITE_NAME } from "@/lib/site";
+import { cache } from "react";
 
 export const dynamic = "force-dynamic";
+
+const getProfessional = cache(async (slug: string) => {
+  const { prisma } = await import("@/lib/db");
+  return prisma.professional.findUnique({
+    where: { slug },
+    include: {
+      user: {
+        select: {
+          name: true,
+          avatarUrl: true,
+          isVerified: true,
+          memberSince: true,
+        },
+      },
+      category: { select: { name: true, slug: true, icon: true } },
+    },
+  });
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const pro = await getProfessional(slug);
+  if (!pro || !pro.isActive) {
+    return {
+      title: "Profesional no encontrado",
+      robots: { index: false, follow: false },
+    };
+  }
+  const region = regions.find((r) => r.id === pro.region);
+  const comuna = region?.comunas.find((c) => c.id === pro.comuna);
+  const where = [comuna?.name, region?.shortName].filter(Boolean).join(", ");
+  const description =
+    pro.description.length > 160
+      ? `${pro.description.slice(0, 157)}…`
+      : pro.description;
+  const canonical = `/comunidad/${pro.slug}`;
+  return {
+    title: `${pro.title} — ${pro.user.name}${where ? ` en ${where}` : ""}`,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      type: "profile",
+      title: `${pro.title} — ${pro.user.name}`,
+      description,
+      url: absoluteUrl(canonical),
+      siteName: SITE_NAME,
+      images: pro.user.avatarUrl ? [{ url: pro.user.avatarUrl }] : undefined,
+    },
+    twitter: {
+      card: "summary",
+      title: `${pro.title} — ${pro.user.name}`,
+      description,
+      images: pro.user.avatarUrl ? [pro.user.avatarUrl] : undefined,
+    },
+  };
+}
 
 function timeAgo(date: Date): string {
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
@@ -25,22 +88,7 @@ export default async function ProfessionalDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { prisma } = await import("@/lib/db");
-
-  const professional = await prisma.professional.findUnique({
-    where: { slug },
-    include: {
-      user: {
-        select: {
-          name: true,
-          avatarUrl: true,
-          isVerified: true,
-          memberSince: true,
-        },
-      },
-      category: { select: { name: true, slug: true, icon: true } },
-    },
-  });
+  const professional = await getProfessional(slug);
 
   if (!professional || !professional.isActive) {
     notFound();
@@ -58,8 +106,75 @@ export default async function ProfessionalDetailPage({
     .slice(0, 2)
     .toUpperCase();
 
+  const canonicalUrl = absoluteUrl(`/comunidad/${professional.slug}`);
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: `${professional.title} — ${professional.user.name}`,
+    description: professional.description,
+    url: canonicalUrl,
+    image: professional.user.avatarUrl || undefined,
+    serviceType: professional.category?.name,
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: [comunaData?.name, regionData?.name].filter(Boolean).join(", ") || professional.location,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: comunaData?.name || professional.location,
+        addressRegion: regionData?.name,
+        addressCountry: "CU",
+      },
+    },
+    ...(professional.phone || professional.whatsapp
+      ? {
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer service",
+            telephone: professional.phone || professional.whatsapp,
+            availableLanguage: ["Spanish"],
+          },
+        }
+      : {}),
+    provider: {
+      "@type": "Person",
+      name: professional.user.name,
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: absoluteUrl("/"),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Comunidad",
+        item: absoluteUrl("/comunidad"),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: professional.title,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Hero header */}
       <section className="bg-gradient-to-br from-teal-600 via-teal-700 to-cyan-800 relative overflow-hidden">
         <div className="absolute inset-0">

@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Comunidad — Directorio de Profesionales",
   description:
-    "Encuentra profesionales de confianza en tu comunidad. Electricistas, plomeros, diseñadores y más. Busca por profesión, región y comuna.",
+    "Encuentra profesionales de confianza en tu comunidad. Electricistas, plomeros, diseñadores y más. Busca por profesión, provincia y municipio en toda Cuba.",
   alternates: { canonical: "/comunidad" },
 };
 
