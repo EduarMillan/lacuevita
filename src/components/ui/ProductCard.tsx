@@ -115,7 +115,7 @@ export default function ProductCard({
   return (
     <Link
       href={`/anuncio/${id}`}
-      className={`group relative flex flex-col bg-surface-lowest rounded-xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${
+      className={`group relative flex flex-col min-w-0 bg-surface-lowest rounded-xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${
         isFeatured
           ? "border-2 border-amber-300 shadow-[0_0_20px_-4px_rgba(245,158,11,0.25)] ring-1 ring-amber-200/50"
           : "border border-transparent hover:border-teal-100"
@@ -171,27 +171,29 @@ export default function ProductCard({
           </span>
         </div>
         {description && (
-          <p className="text-[11px] sm:text-sm text-on-surface-variant line-clamp-2 mb-2 sm:mb-4 hidden sm:block">
+          <p className="text-[11px] sm:text-sm text-on-surface-variant mb-2 sm:mb-4 hidden sm:line-clamp-2 break-words">
             {description}
           </p>
         )}
-        <div className="mt-auto flex items-center justify-between">
-          <span className="text-sm sm:text-xl font-black text-primary">{price}</span>
-          <div className="flex items-center gap-2 sm:gap-3">
+        {/* Precio en su propia linea: un precio largo no empuja la
+            ubicacion fuera de la tarjeta. La ubicacion se corta con "…". */}
+        <div className="mt-auto flex flex-col gap-1">
+          <span className="text-sm sm:text-xl font-black text-primary whitespace-nowrap truncate">{price}</span>
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <span className="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[11px] text-on-surface-variant min-w-0">
+              <span className="material-symbols-outlined text-xs sm:text-sm shrink-0">
+                location_on
+              </span>
+              <span className="truncate" title={location}>{location}</span>
+            </span>
             {viewCount != null && (
-              <span className="flex items-center gap-0.5 text-[9px] sm:text-[11px] text-on-surface-variant">
+              <span className="flex items-center gap-0.5 text-[9px] sm:text-[11px] text-on-surface-variant shrink-0">
                 <span className="material-symbols-outlined text-xs sm:text-sm">
                   visibility
                 </span>
                 {viewCount}
               </span>
             )}
-            <span className="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[11px] text-on-surface-variant">
-              <span className="material-symbols-outlined text-xs sm:text-sm">
-                location_on
-              </span>
-              <span className="truncate max-w-[60px] sm:max-w-none">{location}</span>
-            </span>
           </div>
         </div>
       </div>
